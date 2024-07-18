@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="icon/jpg" href="img/icon.jpg">
+    <link rel="stylesheet" type="text/css" href="css/styleEditarProducto.css">
+    <title>Editar Producto</title>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h5 class="modal-title">Editar Producto</h5>
+        <!-- Formulario de edición -->
+        <form id="editProductForm">
+            <input type="hidden" id="editProductId" name="id">
+            <div class="mb-3">
+                <label for="editProductName" class="form-label">Nombre del Producto</label>
+                <input type="text" class="form-control" id="editProductName" name="nombre" required>
+            </div>
+            <div class="mb-3">
+                <label for="editProductTipo" class="form-label">Tipo del Producto</label>
+                <input type="text" class="form-control" id="editProductTipo" name="tipo" required>
+            </div>
+            <div class="mb-3">
+                <label for="editProductMarca" class="form-label">Marca del Producto</label>
+                <input type="text" class="form-control" id="editProductMarca" name="marca" required>
+            </div>
+            <div class="mb-3">
+                <label for="editProductPrecio" class="form-label">Precio del Producto</label>
+                <input type="number" class="form-control" id="editProductPrecio" name="precio" min="0.01" step="0.01" required>
+            </div>
+            <div class="mb-3">
+                <label for="editProductCantidad" class="form-label">Cantidad del Producto</label>
+                <input type="number" class="form-control" id="editProductCantidad" name="cant" min="1" required>
+            </div>
+            <div class="mb-3">
+                <label for="editcantidadLote" class="form-label">Sumar lote:</label>
+                <input type="number" class="form-control" id="editcantidadLote" name="lote" min="1" required>
+            </div>
+			<br>
+			<br>
+            <button type="submit" class="btn btn-primary" id="boton"><a href="#" class="cta">
+  <span>Guardar Cambios</span>
+  <svg width="13px" height="10px" viewBox="0 0 13 10">
+    <path d="M1,5 L11,5"></path>
+    <polyline points="8 1 12 5 8 9"></polyline>
+  </svg>
+</a></button>
+        </form>
+    </div>
+
+<script>
+     $(document).ready(function() {
+        // Obtener el id del producto de la URL
+        var urlParams = new URLSearchParams(window.location.search);
+        var productId = urlParams.get('id');
+
+        // AJAX para obtener los detalles del producto
+        $.ajax({
+            url: 'obtener_producto.php',
+            type: 'POST',
+            dataType: 'json',
+            data: { id: productId },
+            success: function(response) {
+                if (response.success) {
+                    // Llenar los campos del formulario con los datos obtenidos
+                    $('#editProductId').val(response.data.id);
+                    $('#editProductName').val(response.data.nombre);
+                    $('#editProductMarca').val(response.data.marca);
+                    $('#editProductTipo').val(response.data.tipo);
+                    $('#editProductPrecio').val(response.data.precio);
+                    $('#editProductCantidad').val(response.data.cant);
+                    $('#editcantidadLote').val(response.data.lote);
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error al obtener detalles del producto:', error);
+                alert('Error al obtener detalles del producto. Consulte a un administrador.');
+            }
+        });
+
+        // Manejar el envío del formulario de edición
+        $('#editProductForm').submit(function(event) {
+            event.preventDefault();
+            $.ajax({
+                url: 'actualizar_producto.php',
+                type: 'POST',
+                dataType: 'json',
+                data: $(this).serialize(),
+                success: function(response) {
+                    if (response.success) {
+                        alert('Producto actualizado correctamente');
+                        window.close(); // Cerrar la ventana después de actualizar
+                    } else {
+                        alert('Error al actualizar el producto: ' + response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error al actualizar el producto:', error);
+                    alert('Error al actualizar el producto. Consulte a un administrador.');
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
