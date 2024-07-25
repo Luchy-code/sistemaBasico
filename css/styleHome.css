@@ -1,0 +1,34 @@
+body {
+	  background:radial-gradient(circle, rgba(250,192,8,1) 0%, rgba(255,251,136,1) 100%);
+    }
+#cabeza{
+	background-color:white;
+}
+
+#table {
+	margin:30px;
+            width: 95%;
+            border-collapse: collapse;
+        }
+		#accion{
+			width:60%;
+		}
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+#tabla{
+	background-color:white;
+}
+
+footer{
+	text-align: center;
+	font-size:30px;
+	
+}
